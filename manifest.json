@@ -1,17 +1,26 @@
 {
   "id": "lunar-calendar",
   "name": "农历日历",
-  "description": "查询今天或指定公历日期对应的中国农历日期、闰月、干支和生肖",
-  "version": "1.0.0",
+  "description": "官方历表离线农历换算与月历工作台，1901–2099年、闰月、干支生肖及来源信息",
+  "version": "1.1.0",
   "author": "aide",
   "main": "index.js",
   "enabled": true,
   "installedAt": "",
-  "settingsSchema":   {
+  "settingsSchema": {
     "type": "object",
     "title": "插件参数",
     "description": "此插件暂未声明专属选项。可在扩展参数中添加插件会读取的设置，也可切换到文本模式直接编辑 JSON。",
     "properties": {},
     "additionalProperties": true
+  },
+  "workbench": {
+    "protocol": 1,
+    "entry": "workbench.html",
+    "title": "农历工作台",
+    "tools": [
+      "get_lunar_date",
+      "get_lunar_month"
+    ]
   }
 }

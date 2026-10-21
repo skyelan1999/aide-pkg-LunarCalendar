@@ -1,51 +1,33 @@
-# LunarCalendar · Aide 农历日历
+# 农历日历 · LunarCalendar 1.1.0
 
-Aide `lunar-calendar` 插件的独立分发仓库，版本 **1.0.0**，MIT 许可。源码来自 [Aide 4dc9a7b0](https://github.com/skyelan1999/aide/tree/4dc9a7b0b01fef6ac3550b0b0fcf97db42d45f94/plugins/lunar-calendar)，运行代码及安装 ZIP 与已有市场 1.0.0 保持一致。
+独立Aide插件，提供农历月历工作台和只读日期工具。代码MIT许可；香港天文台日期事实集另按政府开放资料条款署名，不声明为MIT或官方认证产品。
 
-## 能力
+## 工作台
 
-`get_lunar_date({date?})` 是可执行的只读工具。可传 `YYYY-MM-DD` 公历日期；省略日期时，按 **Asia/Shanghai 中国标准时间**确定今天。返回公历日期、农历年月日、闰月标记、干支年、生肖和易读农历日期。
+在插件列表中点击「农历工作台」。可查看公历/农历月历、闰月、生肖、农历年的干支和节气日期，支持日期输入、前后月份、今天、方向键/Home/End选日、桌面/窄屏和宿主明暗主题。工作台与Aide工具使用同一套离线日期数据，不调用模型。
 
-例如，传入 `{"date":"2024-02-10"}` 返回：
+## Aide工具
 
-```json
-{
-  "gregorianDate": "2024-02-10",
-  "lunarYear": 2024,
-  "lunarMonth": "正月",
-  "isLeapMonth": false,
-  "lunarDay": 1,
-  "lunarDayName": "初一",
-  "ganzhiYear": "甲辰",
-  "zodiac": "龙",
-  "lunarDate": "甲辰年正月初一",
-  "timeZone": "Asia/Shanghai"
-}
-```
+- `get_lunar_date({date?})`：严格公历YYYY-MM-DD；省略时按Aide主机时钟、Asia/Shanghai确定今天。保留原有gregorianDate、lunarYear、lunarMonth、isLeapMonth、lunarDay、lunarDayName、ganzhiYear、zodiac、lunarDate、timeZone，新增月份数字、天数与来源信息。
+- `get_lunar_month({year?,month?})`：年月一起提供或一起省略，返回整月农历、闰月、星期定位及节气日期。
 
-换算由 Node.js Intl/ICU 的 Chinese calendar 数据在本地完成，不访问网络、不读写工作区，也没有 npm 运行依赖。默认日期依据 **Aide 插件运行环境**的系统时钟，即使使用 SSH 工作区也不是远程设备时钟；当天日期始终按中国标准时间解释，与浏览器或容器默认时区无关。
+例如 `{"date":"2024-02-10"}` 为甲辰年正月初一；`{"date":"1917-03-23"}` 为闰二月初一；2033年闰十一月、2057年临近午夜朔的日期均按固定HKO历表口径处理。
 
-无效日期或格式会返回错误。支持范围和换算数据取决于运行环境的 ICU；运行时缺少中国农历数据会明确报错。插件提供的是干支**年**。Aide 普通会话可通过现有插件工具机制调用，小秘的农历工具白名单需要宿主支持。插件没有独立 UI 或工作台。
+## 日期口径与限制
 
-## 安装
+支持1901-01-01至2099-12-31。1.1.0使用固定版本香港天文台公开历表的离线月份锚点，替代旧版依赖Node/ICU版本的中国农历转换。今天只省略参数才使用，空字符串、null、数字和无效日期明确报错，不静默退回今天。干支年和生肖以正月初一换年，不混用立春界限。来源及远期接近午夜的预测不确定性均可查询，详见[审计报告](docs/calendar-audit.md)。不提供官方调休安排，也不含宜忌预测。
 
-需要支持插件导入的 Aide（市场兼容基线 `0.1.17.0 RC2`）及含中国农历 ICU 数据的 Node.js 插件运行环境。平台声明为 Windows、macOS 和 Linux；本次实际验证环境为 Linux，未实测 Windows/macOS。
+## 安装和验证
 
-从 [v1.0.0 Release](https://github.com/skyelan1999/aide-pkg-LunarCalendar/releases/tag/v1.0.0) 说明中的固定提交链接下载 `aide-pkg-LunarCalendar-v1.0.0.zip` 和 `SHA256SUMS`，校验后通过 Aide 插件管理导入；也可在[官方插件市场](https://skyelan1999.github.io/aide-pkg-shop/)搜索 `lunar-calendar`。
+需要Node.js 18+及支持protocol 1工作台桥的Aide。市场兼容基线0.1.17.3 RC1；旧宿主需升级才能打开工作台。支持Windows/macOS/Linux及SSH工作区，实际测试为Linux；数据在Aide宿主本地读取，不访问SSH设备。
+
+从本仓库Releases下载1.1.0 ZIP与SHA256SUMS，或从官方商店升级；同ID升级保留用户设置。ZIP明确包含运行资源，无需npm安装、网络API或中国农历ICU数据。
 
 ```sh
-sha256sum -c SHA256SUMS
-```
-
-已安装同 ID、同版本的用户无需重复安装。ZIP 保留原包的 `LICENSE`、`index.js`、`manifest.json` 和 `test.js`，不重新打包。安装包托管于仓库 `packages/v1.0.0/`，Release 提供固定提交下载链接，没有另行上传二进制附件；市场分发相同字节。
-
-## 验证
-
-```sh
-node --check index.js
+node scripts/build.cjs
 node scripts/verify.cjs
+node test/calendar-audit.test.cjs
+python3 scripts/package.py
 ```
 
-验证脚本在临时目录中提供原测试需要的最小注册表，运行未修改的 `test.js`，覆盖春节、闰二月、干支生肖、默认日期及无效输入。发布时另用 Aide 原生插件宿主验证入口、可执行工具 surface 和实际调用，并运行 Aide/小秘农历工具回归。精确结果见 `docs/release-verification.json`。
-
-SHA-256 用于完整性校验，不是发布者签名；可信 Node 插件机制不是权限沙箱。
+逐日离线回归覆盖72,684天，与黄历插件使用相同数据指纹。`scripts/fetch-reference.py --cache /path/to/cache` 是开发者显式更新数据的工具，运行时不会联网。上游资料未来修订后应重新审计发布，不静默替换已安装数据。来源与权利说明见[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

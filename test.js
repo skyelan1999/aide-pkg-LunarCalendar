@@ -13,7 +13,7 @@ assert.ok(registry.plugins.some(entry => entry.id === manifest.id && entry.enabl
 const tools = [];
 plugin.apply({ tool: definition => tools.push(definition) });
 assert.equal(plugin.name, 'lunar-calendar');
-assert.equal(tools.length, 1);
+assert.equal(tools.length, 2);
 assert.equal(tools[0].name, 'get_lunar_date');
 
 const newYear = tools[0].handler({ date: '2024-02-10' });
@@ -37,4 +37,7 @@ assert.equal(today.timeZone, 'Asia/Shanghai');
 assert.ok(today.lunarDate.endsWith(today.lunarDayName));
 assert.throws(() => tools[0].handler({ date: '2024-02-30' }), RangeError);
 assert.throws(() => tools[0].handler({ date: '20240210' }), TypeError);
+for(const date of [null,'',123,false,'2100-01-01','1900-01-01'])assert.throws(()=>tools[0].handler({date}));
+assert.equal(tools[0].handler({date:'1917-03-23'}).isLeapMonth,true);
+assert.equal(tools[1].handler({year:2033,month:12}).days.find(d=>d.date==='2033-12-22').lunar.isLeapMonth,true);
 console.log('lunar-calendar plugin PASS');

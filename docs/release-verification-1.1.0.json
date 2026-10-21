@@ -1,0 +1,46 @@
+{
+  "version": "1.1.0",
+  "hostCommit": "a0ffa35a8d0121374049df17b5e5d375009bd8f6",
+  "actualHost": {
+    "status": "PASS",
+    "command": "source /workspace/.aide-cloud/env.sh; AIDE_SOURCE=/workspace/aide bash /workspace/aide-pkg-almanac/scripts/verify-host.sh",
+    "scope": "Disposable Aide testApp, three actual ZIP imports and executable tools, Chromium sandbox iframe and MessagePort bridge under Go race; final run 15.391s; no real models/user data"
+  },
+  "browser": {
+    "status": "PASS",
+    "scope": "Actual Aide testApp ZIP import, executable tools and sandboxed workbench/MessagePort bridge, no real models or user data",
+    "checks": [
+      "Shanghai today under Los Angeles browser timezone",
+      "Spring Festival/lunar/yi-ji from real host tools",
+      "29/31 day month, navigation, keyboard focus",
+      "leap lunar month, Qingming, extra details",
+      "1901/2099 navigation boundaries",
+      "1440/390 comfort/blue light/dark, no horizontal overflow",
+      "manual theme and today",
+      "LunarCalendar official leap/2033/2057 dates, calendar keyboard and eight viewport/themes",
+      "CurrentTime ticking, timezones, ISO week, invalid zone recovery and eight viewport/themes",
+      "CurrentTime close stops calls",
+      "tool failure message/retry recovery",
+      "workbench close, no external browser requests or page errors"
+    ],
+    "errors": []
+  },
+  "package": {
+    "path": "packages/v1.1.0/aide-pkg-LunarCalendar-v1.1.0.zip",
+    "sha256": "70f14e9538bf5a645c63d9f16ce231852944d83dd9fd27428c29065509a9e964",
+    "bytes": 53159,
+    "reproducible": true
+  },
+  "runtimeSha256": {
+    "index.js": "65f7e9ebc4dc91ec857b849ce9a44e0cd5649dab91cafc65c01dea8b411bfec2",
+    "manifest.json": "eeda518202c8282b770bc8723ffeb421d3b782f278e4df8bc94332eaf7e699a8",
+    "workbench.html": "a2efff30ed7a8e38e116fad385dbd36596fa964bfbccb40bd5f18e038c4cffe7",
+    "lib/calendar.js": "9ec16ffc4d2a130f7c5b250bb84ed7d3b2dedeb79e580868840798980b56814d",
+    "vendor/hko-reference.json": "b80168af3dcdc37b8ed4268a075f6d942e840b1ab3c06d3ccbdc9b72a1522bc0"
+  },
+  "unverified": [
+    "Windows/macOS physical runtime",
+    "Production Aide deployment",
+    "Paid model end-to-end"
+  ]
+}
